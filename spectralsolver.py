@@ -15,8 +15,10 @@ from tkinter import filedialog
 
 
 
-xmin = 2500
+xmin = 2000
 xmax = 3900
+
+normalize_window = [.35, 1]
 
 
 
@@ -45,6 +47,14 @@ def truncate(data, indmin, indmax):
 
 def whole_normalize(data):
     return np.divide(data, np.sum(data))
+
+def window_max_normalize(x_data, data_range):
+    indmin = int(data_range[0] * x_data.size)
+    indmax = int(data_range[1] * x_data.size)
+    window = x_data[indmin:indmax]
+    max_val = window.max()
+    return x_data / max_val
+
 
 def wavelength_to_raman(wavelengths, ExcitationWavelength):
     return 10_000_000 / ExcitationWavelength - 10_000_000 / wavelengths
@@ -172,7 +182,8 @@ for row in data.index:
 
     corrected_signal = specs.y - baseline_y
 
-    corrected_signal = whole_normalize(corrected_signal)
+    # corrected_signal = whole_normalize(corrected_signal)
+    corrected_signal = window_max_normalize(corrected_signal, normalize_window)
 
     x = specs.x
     y = specs.y
