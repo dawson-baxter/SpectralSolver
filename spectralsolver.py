@@ -220,5 +220,8 @@ average_data = np.vstack((average_x, average_y))
 include_x = input('Include x axis data for clipboard? [y/n]: ')
 clippable(average_data.transpose(), include_x.lower() == 'y')
 
+for row in data.index:
+    print(str(data['Capture Info'][row]['OriginalFilename']))
+
 plt.plot(average_data[0, :], average_data[1,:])
 plt.show()
